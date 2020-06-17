@@ -3,7 +3,7 @@ import random
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
 
-producer = KafkaProducer(bootstrap_servers='172.17.0.1:32768')
+producer = KafkaProducer(bootstrap_servers='172.17.0.1:9092')
 
 #var = 1
 #while var == 1:
