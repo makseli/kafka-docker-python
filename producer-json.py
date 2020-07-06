@@ -1,20 +1,23 @@
 import random
 from kafka import KafkaProducer
+from json import dumps
 
-producer = KafkaProducer(bootstrap_servers='0.0.0.0:9092')
+producer = KafkaProducer(bootstrap_servers='0.0.0.0:9092',
+                         value_serializer=lambda x:
+                         dumps(x).encode('utf-8'))
 
 num = random.randint(0, 10)
 
-num_bytes = bytes(str(num), encoding='utf-8')
+data = {'number': num}
 
-is_send = producer.send('test-topic', value=num_bytes, key=num_bytes)
+is_send = producer.send('test-topic', value=data)
 # Block for 'synchronous' sends
 try:
     record_metadata = is_send.get(timeout=2)
-    print(record_metadata)
+    print('send DATA: ', data)
 except Exception as exc:
     # Decide what to do if produce request failed...
-    #log.exception()
+    # log.exception()
     print('Exception: ', exc)
 
 print(' finish ')
@@ -22,6 +25,3 @@ print(' finish ')
 
 # print(record_metadata.partition)
 # print(record_metadata.offset)
-
-
-
